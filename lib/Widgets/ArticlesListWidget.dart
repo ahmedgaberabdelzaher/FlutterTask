@@ -24,6 +24,26 @@ class ArticlesListView extends StatelessWidget {
   }
 
   Future<List<Articles>> _fetchArticles() async {
+    var firstUrl =
+        'https://newsapi.org/v1/articles?source=associated-press&apiKey=33d48e11ae934d1da44b75f767eb89e0';
+    var secondUrl =
+        'https://newsapi.org/v1/articles?source=the-next-web&apiKey=33d48e11ae934d1da44b75f767eb89e0';
+    var response = await Future.wait([
+      http.get(Uri.parse(firstUrl)),
+      http.get(Uri.parse(secondUrl)),
+    ]);
+    List<Map<String, dynamic>> articles = <Map<String, dynamic>>[];
+    for (var i in response) {
+      if (i.statusCode == 200) {
+        articles.addAll(
+            List<Map<String, dynamic>>.from(json.decode(i.body)['articles']));
+      } else {
+        throw Exception('Failed to load Articles from API');
+      }
+    }
+    return articles.map((article) => new Articles.fromJson(article)).toList();
+  }
+  /*
     final response = await http.get(Uri.parse(
         'https://newsapi.org/v1/articles?source=associated-press&apiKey=33d48e11ae934d1da44b75f767eb89e0'));
 
@@ -33,8 +53,8 @@ class ArticlesListView extends StatelessWidget {
       return articles.map((article) => new Articles.fromJson(article)).toList();
     } else {
       throw Exception('Failed to load Articles from API');
-    }
-  }
+    }*/
+  //}
 
   ListView _articlesListView(data) {
     return ListView.builder(
@@ -55,11 +75,19 @@ class ArticlesListView extends StatelessWidget {
                     style: TextStyle(fontSize: 18, color: Colors.black),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 8.0),
+                    padding: EdgeInsets.only(left: 5.0),
                     child: Text(
-                        data[index].author != null ? data[index].author : '',
+                        data[index].author != null
+                            ? 'By ' + data[index].author
+                            : '',
                         style: TextStyle(fontSize: 16, color: Colors.black38)),
                   ),
+                  Text(
+                      data[index].publishedAt != null
+                          ? data[index].publishedAt
+                          : '',
+                      style: TextStyle(fontSize: 14, color: Colors.black38),
+                      textAlign: TextAlign.right),
                   Divider()
                 ],
               ),

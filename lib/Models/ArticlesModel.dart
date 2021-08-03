@@ -11,7 +11,7 @@ class ArticlesModel {
     source = json['source'];
     sortBy = json['sortBy'];
     if (json['articles'] != null) {
-      articles = new List<Articles>();
+      articles = <Articles>[];
       json['articles'].forEach((v) {
         articles.add(new Articles.fromJson(v));
       });

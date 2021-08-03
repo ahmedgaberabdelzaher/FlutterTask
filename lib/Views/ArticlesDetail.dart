@@ -34,15 +34,10 @@ class ArticlesDetails extends StatelessWidget {
                     ),
                     Text(
                       articles.description != null ? articles.description : '',
-                      style: TextStyle(fontSize: 18, color: Colors.black),
+                      style: TextStyle(fontSize: 16, color: Colors.black38),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 8.0),
-                      child: Text(
-                          articles.author != null ? articles.author : '',
-                          style:
-                              TextStyle(fontSize: 16, color: Colors.black38)),
-                    ),
+                    Text(articles.author != null ? 'By ' + articles.author : '',
+                        style: TextStyle(fontSize: 16, color: Colors.black38)),
                   ])),
               ElevatedButton(onPressed: () {}, child: Text('Open Web Site '))
             ],
